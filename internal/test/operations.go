@@ -118,6 +118,12 @@ func MustRecvMsg(t *testing.T, s mangos.Socket) *mangos.Message {
 	return m
 }
 
+func MustNotRecvMsg(t *testing.T, s mangos.Socket, err error) {
+	m, e := s.RecvMsg()
+	MustBeError(t, e, err)
+	MustBeNil(t, m)
+}
+
 func MustSendMsg(t *testing.T, s mangos.Socket, m *mangos.Message) {
 	MustSucceed(t, s.SendMsg(m))
 }

@@ -61,3 +61,8 @@ func AddrTestTLS() string {
 func AddrTestInp() string {
 	return (fmt.Sprintf("inproc://test_%d", NextPort()))
 }
+
+// AddrTestTCPSomeIP returns a TCP address.
+func AddrTestTCPSomeIP() string {
+	return (fmt.Sprintf("tcp-someip://127.0.0.1:%d", NextPort()))
+}

@@ -184,6 +184,7 @@ func TestXReqRecvResizeDiscard(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		for {
+			t.Logf("Once")
 			m := mangos.NewMessage(0)
 			m.Body = append(m.Body, 0x80, 0, 0, 1)
 			e := mock.MockSendMsg(m, time.Second)

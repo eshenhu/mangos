@@ -123,5 +123,7 @@ const (
 	ProtoSurveyor   = (6 * 16) + 2
 	ProtoRespondent = (6 * 16) + 3
 	ProtoBus        = (7 * 16)
+	ProtoSomeIPReq  = (8 * 16)
+	ProtoSomeIPRep  = (8 * 16) + 1
 	ProtoStar       = (100 * 16) // Experimental!
 )

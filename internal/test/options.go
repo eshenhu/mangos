@@ -69,6 +69,26 @@ func VerifyOptionInt(t *testing.T, f func() (mangos.Socket, error), option strin
 	MustSucceed(t, s.Close())
 }
 
+// VerifyOptionUInt16 validates integer options.
+func VerifyOptionUInt16(t *testing.T, f func() (mangos.Socket, error), option string) {
+	s, err := f()
+	MustSucceed(t, err)
+	val, err := s.GetOption(option)
+	MustSucceed(t, err)
+	var v uint16 = 1
+	MustBeTrue(t, reflect.TypeOf(val) == reflect.TypeOf(v))
+
+	v = 2
+	MustSucceed(t, s.SetOption(option, v))
+	val, err = s.GetOption(option)
+	MustSucceed(t, err)
+	MustBeTrue(t, val.(uint16) == v)
+
+	MustBeError(t, s.SetOption(option, time.Now()), mangos.ErrBadValue)
+	MustBeError(t, s.SetOption(option, "junk"), mangos.ErrBadValue)
+	MustSucceed(t, s.Close())
+}
+
 // VerifyOptionQLen validates queue length options.
 func VerifyOptionQLen(t *testing.T, f func() (mangos.Socket, error), option string) {
 	s, err := f()

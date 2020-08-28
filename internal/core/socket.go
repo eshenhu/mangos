@@ -153,7 +153,13 @@ func (s *socket) Close() error {
 }
 
 func (ctx context) Send(b []byte) error {
-	msg := mangos.NewMessage(len(b))
+	var msg *Message
+	if v, err := ctx.GetOption(mangos.OptionLinkSz); err != nil {
+		msg = mangos.NewMessage(len(b))
+	} else {
+		sz := v.(int)
+		msg = mangos.NewMessageWithRzv(3, sz, len(b))
+	}
 	msg.Body = append(msg.Body, b...)
 	return ctx.SendMsg(msg)
 }

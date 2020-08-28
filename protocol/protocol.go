@@ -36,6 +36,8 @@ const (
 	ProtoRespondent = mangos.ProtoRespondent
 	ProtoBus        = mangos.ProtoBus
 	ProtoStar       = mangos.ProtoStar // Experimental
+	ProtoSomeIPReq  = mangos.ProtoSomeIPReq
+	ProtoSomeIPRep  = mangos.ProtoSomeIPRep
 )
 
 // Pipe is a single connection -- provided by the transport layer.
@@ -67,6 +69,7 @@ const (
 	ErrProtoOp     = errors.ErrProtoOp
 	ErrProtoState  = errors.ErrProtoState
 	ErrCanceled    = errors.ErrCanceled
+	ErrTooShort    = errors.ErrTooShort
 )
 
 // Common option definitions
@@ -84,6 +87,15 @@ const (
 	OptionLinger       = mangos.OptionLinger // Remove?
 	OptionTTL          = mangos.OptionTTL
 	OptionBestEffort   = mangos.OptionBestEffort
+	OptionLinkSz       = mangos.OptionLinkSz
+
+	OptionSomeIPSrvID = mangos.OptionSomeIPSrvID
+	OptionSomeIPCltID = mangos.OptionSomeIPCltID
+	OptionSomeIPPV    = mangos.OptionSomeIPPV
+	OptionSomeIPInfPV = mangos.OptionSomeIPInfPV
+
+	OptionSomeIPCtxMaster = mangos.OptionSomeIPCtxMaster
+	OptionSomeIPCtxSlave  = mangos.OptionSomeIPCtxSlave
 )
 
 // MakeSocket creates a Socket on top of a Protocol.

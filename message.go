@@ -59,6 +59,14 @@ func newMsg(sz int) *Message {
 	return m
 }
 
+func newMsgWithRzv(rzvHeader int, rzvBody int, sz int) *Message {
+	m := &Message{}
+	m.bbuf = make([]byte, rzvBody, rzvBody+sz)
+	m.hbuf = make([]byte, rzvHeader, rzvHeader)
+	m.bsize = sz
+	return m
+}
+
 // We can tweak these!
 var messageCache = []msgCacheInfo{
 	{
@@ -173,6 +181,26 @@ func NewMessage(sz int) *Message {
 	}
 	if m == nil {
 		m = newMsg(sz)
+	}
+
+	m.Body = m.bbuf
+	m.Header = m.hbuf
+	atomic.StoreInt32(&m.refcnt, 1)
+	return m
+}
+
+// NewMessageWithRzv is another supported way to obtain a new Message.  This makes
+// use of a "cache" which greatly reduces the load on the garbage collector.
+func NewMessageWithRzv(rzvHeader int, rzvBody int, sz int) *Message {
+	var m *Message
+	for i := range messageCache {
+		if sz < messageCache[i].maxbody {
+			m = messageCache[i].pool.Get().(*Message)
+			break
+		}
+	}
+	if m == nil {
+		m = newMsgWithRzv(rzvHeader, rzvBody, sz)
 	}
 
 	m.Body = m.bbuf

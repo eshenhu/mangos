@@ -28,7 +28,7 @@ func VerifyRaw(t *testing.T, f func() (mangos.Socket, error)) {
 	val, err := s.GetOption(mangos.OptionRaw)
 	MustSucceed(t, err)
 	if b, ok := val.(bool); ok {
-		MustBeTrue(t, b)
+		MustBeFalse(t, b)
 	} else {
 		t.Fatalf("Not a boolean")
 	}

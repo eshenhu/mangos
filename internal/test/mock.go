@@ -507,6 +507,11 @@ func MockMustRecvStr(t *testing.T, p MockPipe, str string, d time.Duration) {
 	MustBeTrue(t, string(msg.Body) == str)
 }
 
+func MockRecvMsg(t *testing.T, p MockPipe, d time.Duration) (msg *mangos.Message, err error) {
+	msg, err = p.MockRecvMsg(d)
+	return
+}
+
 // AddrMock returns a generic address for mock sockets.
 func AddrMock() string {
 	return "mock://mock"

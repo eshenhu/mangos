@@ -62,6 +62,8 @@ func getScratchAddr(tran transport.Transport) string {
 		return AddrTestWS()
 	case "wss":
 		return AddrTestWSS()
+	case "tcp-someip":
+		return AddrTestTCPSomeIP()
 	}
 	return "unknown://"
 }

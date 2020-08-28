@@ -162,6 +162,8 @@ const (
 	// defaults to False.
 	OptionBestEffort = "BEST-EFFORT"
 
+	// OptionLinkSz is the size of L2 link size
+	OptionLinkSz = "LINK-SIZE"
 	// OptionLocalAddr expresses a local address.  For dialers, this is
 	// the (often random) address that was locally bound.  For listeners,
 	// it is usually the service address.  The value is a net.Addr.  This
@@ -192,4 +194,17 @@ const (
 	// Note that mangos v1 behavior is the same as if this option is
 	// set to true.
 	OptionDialAsynch = "DIAL-ASYNCH"
+
+	//OptionSomeIPSrvID SOME/IP Service ID
+	OptionSomeIPSrvID = "SOMEIP-SRV-ID"
+	//OptionSomeIPCltID SOME/IP Client ID
+	OptionSomeIPCltID = "SOMEIP-CLIENT-ID"
+	//OptionSomeIPPV    SOME/IP Protocol Version
+	OptionSomeIPPV = "SOMEIP-PRO-PV"
+	//OptionSomeIPInfPV SOME/IP Interface Version
+	OptionSomeIPInfPV = "SOMEIP-INF-PV"
+	//OptionSomeIPCtxMaster SOME/IP Master for REQ/REP
+	OptionSomeIPCtxMaster = "SOMEIP-CTX-MASTER"
+	//OptionSomeIPCtxSlave SOME/IP Slave for Notification
+	OptionSomeIPCtxSlave = "SOMEIP-CTX-SLAVE"
 )
