@@ -23,18 +23,24 @@ type SomeIPOpts struct {
 // MsgTypeCode code
 type MsgTypeCode uint8
 
-// Protocol identity information.
+// SIP_RPC_684
 const (
-	MsgTypeReq        MsgTypeCode = 0x00
-	MsgTypeReqNoRtn   MsgTypeCode = 0x01
-	MsgTypeNotify     MsgTypeCode = 0x02
-	MsgTypeRep        MsgTypeCode = 0x80
-	MsgTypeErr        MsgTypeCode = 0x81
-	MsgTypeTPReq      MsgTypeCode = 0x20
-	MsgTypeTPReqNoRtn MsgTypeCode = 0x21
-	MsgTypeTPNotify   MsgTypeCode = 0x22
-	MsgTypeTPRep      MsgTypeCode = 0x23
-	MsgTypeTPErr      MsgTypeCode = 0x24
+	MT_REQUEST               MsgTypeCode = 0x00
+	MT_REQUEST_NO_RETURN     MsgTypeCode = 0x01
+	MT_NOTIFICATION          MsgTypeCode = 0x02
+	MT_REQUEST_ACK           MsgTypeCode = 0x40
+	MT_REQUEST_NO_RETURN_ACK MsgTypeCode = 0x41
+	MT_NOTIFICATION_ACK      MsgTypeCode = 0x42
+	MT_RESPONSE              MsgTypeCode = 0x80
+	MT_ERROR                 MsgTypeCode = 0x81
+	MT_RESPONSE_ACK          MsgTypeCode = 0xC0
+	MT_ERROR_ACK             MsgTypeCode = 0xC1
+	MT_UNKNOWN               MsgTypeCode = 0xFF	
+	MT_TP_REQUEST			 MsgTypeCode = 0x20
+	MT_TP_REQUEST_NO_RETURN  MsgTypeCode = 0x21
+	MT_TP_NOTIFICATION	     MsgTypeCode = 0x22
+	MT_TP_RESPONSE			 MsgTypeCode = 0x23
+	MT_TP_ERROR		         MsgTypeCode = 0x24
 )
 
 //MessageSomeIP represent constants
@@ -82,4 +88,3 @@ func GetSomeIPRtnCode(m *protocol.Message) ErrCodeSomeIP {
 func GetSomeIPMsgType(m *protocol.Message) MsgTypeCode {
 	return (MsgTypeCode)(m.Body[14])
 }
-

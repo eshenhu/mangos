@@ -446,7 +446,7 @@ func chkMsgCommon(s *socket, m *messageSomeIP) (*protocol.Message, error) {
 	if e != proto_someip.E_OK {
 		err = protocol.ErrProtoOp
 		m.M.Body = m.M.Body[0:proto_someip.RzvBodyBySomeIP]
-		m.M.Body[14] = (byte)(proto_someip.MsgTypeErr)
+		m.M.Body[14] = (byte)(proto_someip.MT_ERROR)
 		m.M.Body[15] = (byte)(e)
 	}
 

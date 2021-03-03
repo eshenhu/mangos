@@ -3,7 +3,6 @@ package proto_someip
 import (
 	"encoding/binary"
 
-
 	"go.nanomsg.org/mangos/v3"
 	"go.nanomsg.org/mangos/v3/protocol"
 )
@@ -26,7 +25,16 @@ func NewReqMsg(method uint16, snd []byte) *protocol.Message {
 	msg := NewSomeIPMsg(len(snd))
 	copy(msg.Body[RzvBodyBySomeIP:], snd[:])
 	binary.BigEndian.PutUint16(msg.Body[2:4], method)
-	msg.Body[14] = (byte)(MsgTypeReq)
+	msg.Body[14] = (byte)(MT_REQUEST)
+	msg.Body[15] = 0
+	return msg
+}
+
+func NewFireMsg(method uint16, snd []byte) *protocol.Message {
+	msg := NewSomeIPMsg(len(snd))
+	copy(msg.Body[RzvBodyBySomeIP:], snd[:])
+	binary.BigEndian.PutUint16(msg.Body[2:4], method)
+	msg.Body[14] = (byte)(MT_REQUEST_NO_RETURN)
 	msg.Body[15] = 0
 	return msg
 }

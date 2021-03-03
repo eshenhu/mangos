@@ -114,7 +114,7 @@ func TestXReqSomeIPPingPong(t *testing.T) {
 	MustSucceed(t, e)
 	MustBeTrue(t, string(body) == "PING")
 
-	pong := proto_someip.NewRepMsg(ping, proto_someip.MsgTypeRep, proto_someip.E_OK, []byte("PONG"))
+	pong := proto_someip.NewRepMsg(ping, proto_someip.MT_RESPONSE, proto_someip.E_OK, []byte("PONG"))
 
 	MustSucceed(t, rSrv1.SendMsg(pong))
 	pongR1, e := rClt1.RecvMsg()
@@ -123,11 +123,11 @@ func TestXReqSomeIPPingPong(t *testing.T) {
 	errCode := proto_someip.GetSomeIPRtnCode(pongR1)
 	MustBeTrue(t, errCode == proto_someip.E_OK)
 	msgType := proto_someip.GetSomeIPMsgType(pongR1)
-	MustBeTrue(t, msgType == proto_someip.MsgTypeRep)
+	MustBeTrue(t, msgType == proto_someip.MT_RESPONSE)
 	body = proto_someip.GetSomeIPBody(pongR1)
 	MustBeTrue(t, string(body) == "PONG")
 
-	ping2 := proto_someip.NewRepMsg(ping, proto_someip.MsgTypeErr, proto_someip.E_UNKNOWN_METHOD, nil)
+	ping2 := proto_someip.NewRepMsg(ping, proto_someip.MT_ERROR, proto_someip.E_UNKNOWN_METHOD, nil)
 
 	MustSucceed(t, rSrv1.SendMsg(ping2))
 	pong, e = rClt1.RecvMsg()
@@ -136,7 +136,7 @@ func TestXReqSomeIPPingPong(t *testing.T) {
 	errCode = proto_someip.GetSomeIPRtnCode(pong)
 	MustBeTrue(t, errCode == proto_someip.E_UNKNOWN_METHOD)
 	msgType = proto_someip.GetSomeIPMsgType(pong)
-	MustBeTrue(t, msgType == proto_someip.MsgTypeErr)
+	MustBeTrue(t, msgType == proto_someip.MT_ERROR)
 	body = proto_someip.GetSomeIPBody(pong)
 	MustBeTrue(t, len(body) == 0)
 
@@ -164,7 +164,7 @@ func TestXReqSomeIPNotification(t *testing.T) {
 	MustSucceed(t, e)
 	ctxMaster := ctxMaster0.(*context)
 
-	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MsgTypeNotify, proto_someip.E_OK, []byte("PING"))
+	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MT_NOTIFICATION, proto_someip.E_OK, []byte("PING"))
 	MockMustSendMsg(t, mock, m, time.Second)
 
 	_, e = ctxMaster.RecvMsg()
@@ -198,7 +198,7 @@ func TestXReqSomeIPResizeSendDiscard(t *testing.T) {
 	self, e := NewReqSocketWithOpts(opt)
 	MustSucceed(t, e)
 
-	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MsgTypeReq, proto_someip.E_OK, []byte("PING"))
+	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MT_REQUEST, proto_someip.E_OK, []byte("PING"))
 
 	MustSucceed(t, self.SetOption(mangos.OptionWriteQLen, 1))
 	MustSucceed(t, self.SendMsg(m))
@@ -236,7 +236,7 @@ func TestXReqSomeIPRecvResizeDiscard(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		for {
-			m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MsgTypeRep, proto_someip.E_OK, []byte("PING"))
+			m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MT_RESPONSE, proto_someip.E_OK, []byte("PING"))
 			e := mock.MockSendMsg(m, time.Second)
 			if e != nil {
 				MustBeError(t, e, mangos.ErrClosed)
@@ -263,7 +263,7 @@ func TestXReqSomeIPCloseRecv(t *testing.T) {
 	MustSucceed(t, self.SetOption(mangos.OptionReadQLen, 0))
 	mock, pipe := MockConnect(t, self)
 
-	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MsgTypeRep, proto_someip.E_OK, []byte("PING"))
+	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MT_RESPONSE, proto_someip.E_OK, []byte("PING"))
 	MockMustSendMsg(t, mock, m, time.Second)
 
 	time.Sleep(time.Millisecond * 10)

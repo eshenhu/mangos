@@ -74,7 +74,7 @@ func TestXRepNoHeader(t *testing.T) {
 	self, e := NewRepSocketWithOpts(opt)
 	MustSucceed(t, e)
 
-	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MsgTypeRep, proto_someip.E_OK, []byte("PING"))
+	m := proto_someip.NewMsgRaw(0x02, opt, proto_someip.MT_RESPONSE, proto_someip.E_OK, []byte("PING"))
 	e = self.SendMsg(m)
 	MustSucceed(t, e)
 
@@ -123,18 +123,18 @@ func newRequest(id uint16, content string) *mangos.Message {
 }
 
 func newRequestRaw(id uint16, opt proto_someip.OptSomeIP, content string) *mangos.Message {
-	return proto_someip.NewMsgRaw(id, opt, proto_someip.MsgTypeReq, proto_someip.E_OK, []byte(content))
+	return proto_someip.NewMsgRaw(id, opt, proto_someip.MT_REQUEST, proto_someip.E_OK, []byte(content))
 }
 
 func newReply(id uint16, p mangos.Pipe, opt proto_someip.OptSomeIP, content string) *mangos.Message {
-	m := proto_someip.NewMsgRaw(id, opt, proto_someip.MsgTypeRep, proto_someip.E_OK, []byte(content))
+	m := proto_someip.NewMsgRaw(id, opt, proto_someip.MT_RESPONSE, proto_someip.E_OK, []byte(content))
 	m.Header = m.Header[0:4]
 	binary.BigEndian.PutUint32(m.Header[0:4], p.ID()) // outgoing pipe ID
 	return m
 }
 
 func newNotify(id uint16, p mangos.Pipe, opt proto_someip.OptSomeIP, content string) *mangos.Message {
-	m := proto_someip.NewMsgRaw(id, opt, proto_someip.MsgTypeNotify, proto_someip.E_OK, []byte(content))
+	m := proto_someip.NewMsgRaw(id, opt, proto_someip.MT_NOTIFICATION, proto_someip.E_OK, []byte(content))
 	m.Header = m.Header[0:4]
 	binary.BigEndian.PutUint32(m.Header[0:4], p.ID()) // outgoing pipe ID
 	return m
@@ -185,7 +185,7 @@ func TestXRepSendError(t *testing.T) {
 	m1, e := MockRecvMsg(t, mp, time.Second)
 	MustSucceed(t, e)
 	MustBeTrue(t, len(m1.Body) == proto_someip.RzvBodyBySomeIP)
-	MustBeTrue(t, (proto_someip.GetSomeIPMsgType(m1) == proto_someip.MsgTypeErr))
+	MustBeTrue(t, (proto_someip.GetSomeIPMsgType(m1) == proto_someip.MT_ERROR))
 	MustBeTrue(t, (proto_someip.GetSomeIPRtnCode(m1) == proto_someip.E_WRONG_PROTOCOL_VERSION))
 
 	MustClose(t, self)

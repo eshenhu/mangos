@@ -261,11 +261,11 @@ outer:
 		s.Unlock()
 
 		switch m2.MsgType {
-		case proto_someip.MsgTypeNotify:
+		case proto_someip.MT_NOTIFICATION:
 			recvQ = recvSlaveQ
-		case proto_someip.MsgTypeRep:
+		case proto_someip.MT_RESPONSE:
 			fallthrough
-		case proto_someip.MsgTypeErr:
+		case proto_someip.MT_ERROR:
 			recvQ = recvMasterQ
 		default:
 			continue
@@ -493,7 +493,7 @@ func chkMsgExchange(c *context, m *MessageSomeIP) error {
 	if err := chkMsgCommon(c, m); err != nil {
 		return err
 	}
-	if m.MsgType == proto_someip.MsgTypeRep && c.sessionID != m.SessionID {
+	if m.MsgType == proto_someip.MT_RESPONSE && c.sessionID != m.SessionID {
 		return protocol.ErrProtoOp
 	}
 	return nil
